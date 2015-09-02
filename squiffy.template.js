@@ -304,7 +304,12 @@ var squiffy = {};
 
     squiffy.ui.write = function(text) {
         screenIsClear = false;
-        scrollPosition = squiffy.ui.output.height();
+        if (squiffy.ui.settings.scroll === 'element') {
+            scrollPosition = squiffy.ui.output.height();
+        } else {
+            scrollPosition = squiffy.ui.output.position()["top"] + squiffy.ui.output.height();
+        }
+    
         currentSection.append(jQuery('<div/>').html(squiffy.ui.processText(text)));
         squiffy.ui.scrollToEnd();
     };
@@ -320,22 +325,18 @@ var squiffy = {};
         if (squiffy.ui.settings.scroll === 'element') {
             scrollTo = squiffy.ui.output[0].scrollHeight - squiffy.ui.output.height();
             currentScrollTop = squiffy.ui.output.scrollTop();
-            if (scrollTo > currentScrollTop) {
-                distance = scrollTo - currentScrollTop;
-                duration = distance / 0.4;
-                squiffy.ui.output.stop().animate({ scrollTop: scrollTo }, duration);
-            }
+            distance = scrollTo - currentScrollTop;
+            duration = distance / 0.4;
+            squiffy.ui.output.stop().animate({ scrollTop: scrollTo }, duration);
         }
         else {
             scrollTo = scrollPosition;
             currentScrollTop = Math.max(jQuery('body').scrollTop(), jQuery('html').scrollTop());
-            if (scrollTo > currentScrollTop) {
-                var maxScrollTop = jQuery(document).height() - jQuery(window).height();
-                if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
-                distance = scrollTo - currentScrollTop;
-                duration = distance / 0.5;
-                jQuery('body,html').stop().animate({ scrollTop: scrollTo }, duration);
-            }
+            var maxScrollTop = jQuery(document).height() - jQuery(window).height();
+            if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
+            distance = scrollTo - currentScrollTop;
+            duration = distance / 0.5;
+            jQuery('body,html').stop().animate({ scrollTop: scrollTo }, duration);
         }
     };
 
