@@ -307,7 +307,7 @@ var squiffy = {};
         if (squiffy.ui.settings.scroll === 'element') {
             scrollPosition = squiffy.ui.output.height();
         } else {
-            scrollPosition = squiffy.ui.output.position()["top"] + squiffy.ui.output.height();
+            scrollPosition = squiffy.ui.output.offset()["top"] + squiffy.ui.output.height() + squiffy.ui.settings.scrolladjustment;
         }
     
         currentSection.append(jQuery('<div/>').html(squiffy.ui.processText(text)));
@@ -557,6 +557,7 @@ var squiffy = {};
                 scroll: 'body',
                 persist: true,
                 restartPrompt: true,
+                scrolladjustment: 0,
                 onSet: function (attribute, value) {}
             }, options);
 
